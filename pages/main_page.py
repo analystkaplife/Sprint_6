@@ -1,39 +1,21 @@
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from pages.base_page import BasePage
+from locators.main_page_locators import MainPageLocators
 import time
 
-from locators.main_page_locators import MainPageLocators
 
-
-class MainPage:
+class MainPage(BasePage):
     """Page Object для главной страницы."""
-
-    def __init__(self, driver):
-        """Инициализация страницы."""
-        self.driver = driver
-        self.wait = WebDriverWait(driver, 10)
 
     def click_order_button_header(self):
         """Клик по кнопке «Заказать» в шапке страницы."""
-        button = self.wait.until(
-            EC.element_to_be_clickable(MainPageLocators.ORDER_BUTTON_HEADER)
-        )
-        self.driver.execute_script("arguments[0].click();", button)
+        self.click_element_with_wait(MainPageLocators.ORDER_BUTTON_HEADER)
 
     def click_order_button_middle(self):
         """Клик по кнопке «Заказать» в середине страницы."""
-        # Прокручиваем вниз, чтобы кнопка стала видимой
         self.driver.execute_script("window.scrollTo(0, 500);")
-        
-        button = self.wait.until(
-            EC.element_to_be_clickable(MainPageLocators.ORDER_BUTTON_MIDDLE)
-        )
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});", 
-            button
-        )
+        self.scroll_to_element(MainPageLocators.ORDER_BUTTON_MIDDLE)
         time.sleep(0.3)
-        self.driver.execute_script("arguments[0].click();", button)
+        self.click_element_with_wait(MainPageLocators.ORDER_BUTTON_MIDDLE)
 
     def click_question_button(self, index):
         """
@@ -42,24 +24,16 @@ class MainPage:
         Args:
             index: Порядковый номер вопроса (0-based).
         """
-        # Ждём все элементы аккордеона
         items = self.wait.until(
-            EC.visibility_of_all_elements_located(MainPageLocators.QUESTION_ITEMS)
+            self.EC.visibility_of_all_elements_located(MainPageLocators.QUESTION_ITEMS)
         )
 
-        # Внутри элемента находим кнопку
         button = items[index].find_element(*MainPageLocators.QUESTION_BUTTON)
-
-        # Прокручиваем к элементу с плавной анимацией
         self.driver.execute_script(
-            "arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});", 
+            "arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});",
             button
         )
-        
-        # Небольшая пауза для завершения прокрутки
         time.sleep(0.5)
-        
-        # Кликаем через JavaScript для обхода перекрытия
         self.driver.execute_script("arguments[0].click();", button)
 
     def get_question_answer_text(self, index):
@@ -72,30 +46,25 @@ class MainPage:
         Returns:
             Текст ответа в виде строки.
         """
-        # Ждём все элементы аккордеона
         items = self.wait.until(
-            EC.visibility_of_all_elements_located(MainPageLocators.QUESTION_ITEMS)
+            self.EC.visibility_of_all_elements_located(MainPageLocators.QUESTION_ITEMS)
         )
 
-        # Находим панель
         panel = items[index].find_element(*MainPageLocators.QUESTION_PANEL)
-        # Ждём, пока панель станет видимой (после клика)
-        self.wait.until(EC.visibility_of(panel))
+        self.wait.until(self.EC.visibility_of(panel))
         return panel.text
 
     def click_scooter_logo(self):
         """Клик по логотипу «Самокат» — переход на главную страницу."""
-        logo = self.wait.until(
-            EC.element_to_be_clickable(MainPageLocators.SCOOTER_LOGO)
-        )
-        self.driver.execute_script("arguments[0].click();", logo)
+        self.click_element_with_wait(MainPageLocators.SCOOTER_LOGO)
 
     def click_yandex_logo(self):
         """Клик по логотипу «Яндекс» — открытие Дзена в новой вкладке."""
-        logo = self.wait.until(
-            EC.element_to_be_clickable(MainPageLocators.YANDEX_LOGO)
-        )
-        self.driver.execute_script("arguments[0].click();", logo)
+        self.click_element_with_wait(MainPageLocators.YANDEX_LOGO)
+
+    def get_current_url(self) -> str:
+        """Получить текущий URL страницы."""
+        return self.driver.current_url
 
     def switch_to_new_window(self):
         """
@@ -104,13 +73,17 @@ class MainPage:
         Returns:
             Handle исходной вкладки.
         """
-        self.wait.until(EC.number_of_windows_to_be(2))
+        self.wait.until(self.EC.number_of_windows_to_be(2))
         original_window = self.driver.current_window_handle
         for handle in self.driver.window_handles:
             if handle != original_window:
                 self.driver.switch_to.window(handle)
                 break
         return original_window
+
+    def switch_to_window(self, window_handle):
+        """Переключиться на вкладку с указанным handle."""
+        self.driver.switch_to.window(window_handle)
 
     def wait_for_url_contains(self, expected_url_part: str):
         """
@@ -122,11 +95,3 @@ class MainPage:
         self.wait.until(
             lambda driver: expected_url_part in driver.current_url
         )
-
-    def switch_to_window(self, window_handle):
-        """Переключиться на вкладку с указанным handle."""
-        self.driver.switch_to.window(window_handle)
-
-    def get_current_url(self) -> str:
-        """Получить текущий URL страницы."""
-        return self.driver.current_url
