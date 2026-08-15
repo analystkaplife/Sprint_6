@@ -1,3 +1,4 @@
+import allure
 import pytest
 
 from pages.main_page import MainPage
@@ -19,6 +20,7 @@ QUESTION_DATA = [
 class TestMainPage:
     """Тесты для главной страницы."""
 
+    @allure.title("Проверка аккордеона: при клике на вопрос отображается правильный ответ")
     @pytest.mark.parametrize(
         "question_index, expected_answer",
         QUESTION_DATA,
@@ -30,6 +32,7 @@ class TestMainPage:
         main_page.click_question_button(question_index)
         assert main_page.get_question_answer_text(question_index) == expected_answer
 
+    @allure.title("Проверка перехода на главную страницу при клике по логотипу «Самокат»")
     def test_click_scooter_logo_returns_to_main_page(self, driver):
         """Проверка: клик по логотипу Самоката возвращает на главную страницу."""
         main_page = MainPage(driver)
@@ -37,6 +40,7 @@ class TestMainPage:
         main_page.click_scooter_logo()
         assert main_page.get_current_url() == Urls.BASE_URL
 
+    @allure.title("Проверка открытия Дзена в новой вкладке при клике по логотипу «Яндекс»")
     def test_click_yandex_logo_opens_dzen(self, driver):
         """Проверка: клик по логотипу Яндекса открывает Дзен в новой вкладке."""
         main_page = MainPage(driver)

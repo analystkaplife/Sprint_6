@@ -1,3 +1,4 @@
+import allure
 import pytest
 
 from pages.main_page import MainPage
@@ -29,6 +30,7 @@ ORDER_DATA = [
 class TestOrderFlow:
     """Тесты для сценария оформления заказа."""
 
+    @allure.title("Позитивный сценарий оформления заказа через кнопку в шапке")
     @pytest.mark.parametrize(
         "name, last_name, address, metro, phone, rental_days, comment",
         ORDER_DATA,
@@ -54,6 +56,7 @@ class TestOrderFlow:
 
         assert order_page.is_order_successful()
 
+    @allure.title("Позитивный сценарий оформления заказа через кнопку в середине страницы")
     @pytest.mark.parametrize(
         "name, last_name, address, metro, phone, rental_days, comment",
         ORDER_DATA,

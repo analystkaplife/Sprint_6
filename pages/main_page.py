@@ -1,22 +1,27 @@
+import allure
+import time
+
 from pages.base_page import BasePage
 from locators.main_page_locators import MainPageLocators
-import time
 
 
 class MainPage(BasePage):
     """Page Object для главной страницы."""
 
+    @allure.step("Клик по кнопке «Заказать» в шапке страницы")
     def click_order_button_header(self):
         """Клик по кнопке «Заказать» в шапке страницы."""
         self.click_element_with_wait(MainPageLocators.ORDER_BUTTON_HEADER)
 
+    @allure.step("Клик по кнопке «Заказать» в середине страницы")
     def click_order_button_middle(self):
         """Клик по кнопке «Заказать» в середине страницы."""
-        self.driver.execute_script("window.scrollTo(0, 500);")
+        self.scroll_to_pixels(500)
         self.scroll_to_element(MainPageLocators.ORDER_BUTTON_MIDDLE)
         time.sleep(0.3)
         self.click_element_with_wait(MainPageLocators.ORDER_BUTTON_MIDDLE)
 
+    @allure.step("Клик по кнопке вопроса с индексом {index}")
     def click_question_button(self, index):
         """
         Клик по кнопке вопроса в блоке «Вопросы о важном».
@@ -29,13 +34,11 @@ class MainPage(BasePage):
         )
 
         button = items[index].find_element(*MainPageLocators.QUESTION_BUTTON)
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});",
-            button
-        )
+        self.scroll_to_element_with_web_element(button)
         time.sleep(0.5)
-        self.driver.execute_script("arguments[0].click();", button)
+        self.click_element_with_web_element(button)
 
+    @allure.step("Получение текста ответа на вопрос с индексом {index}")
     def get_question_answer_text(self, index):
         """
         Получить текст ответа на вопрос.
@@ -54,44 +57,35 @@ class MainPage(BasePage):
         self.wait.until(self.EC.visibility_of(panel))
         return panel.text
 
+    @allure.step("Клик по логотипу «Самокат»")
     def click_scooter_logo(self):
         """Клик по логотипу «Самокат» — переход на главную страницу."""
         self.click_element_with_wait(MainPageLocators.SCOOTER_LOGO)
 
+    @allure.step("Клик по логотипу «Яндекс»")
     def click_yandex_logo(self):
         """Клик по логотипу «Яндекс» — открытие Дзена в новой вкладке."""
         self.click_element_with_wait(MainPageLocators.YANDEX_LOGO)
 
-    def get_current_url(self) -> str:
-        """Получить текущий URL страницы."""
-        return self.driver.current_url
-
-    def switch_to_new_window(self):
+    @allure.step("Прокрутка до веб-элемента")
+    def scroll_to_element_with_web_element(self, element):
         """
-        Переключиться на новую вкладку браузера.
-
-        Returns:
-            Handle исходной вкладки.
-        """
-        self.wait.until(self.EC.number_of_windows_to_be(2))
-        original_window = self.driver.current_window_handle
-        for handle in self.driver.window_handles:
-            if handle != original_window:
-                self.driver.switch_to.window(handle)
-                break
-        return original_window
-
-    def switch_to_window(self, window_handle):
-        """Переключиться на вкладку с указанным handle."""
-        self.driver.switch_to.window(window_handle)
-
-    def wait_for_url_contains(self, expected_url_part: str):
-        """
-        Дождаться, пока URL текущей вкладки не будет содержать указанную подстроку.
+        Прокрутить страницу до веб-элемента.
 
         Args:
-            expected_url_part: Часть ожидаемого URL (например, "dzen.ru").
+            element: WebElement, до которого нужно прокрутить
         """
-        self.wait.until(
-            lambda driver: expected_url_part in driver.current_url
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});",
+            element
         )
+
+    @allure.step("Клик по веб-элементу через JavaScript")
+    def click_element_with_web_element(self, element):
+        """
+        Кликнуть по веб-элементу через JavaScript.
+
+        Args:
+            element: WebElement, по которому нужно кликнуть
+        """
+        self.driver.execute_script("arguments[0].click();", element)

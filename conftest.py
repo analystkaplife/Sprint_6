@@ -14,8 +14,6 @@ def driver():
     """
     # Настройка опций браузера
     options = Options()
-     # options.add_argument("--width=1920")
-     # options.add_argument("--height=1080")
     
     # Создание драйвера
     driver = webdriver.Firefox(options=options)
