@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 
 
 class OrderModalPageLocators:
-    """Локаторы для модального окна подтверждения заказа."""
+    """Локаторы для модального окна подтверждения заказа. """
 
     # Кнопка "Да" в модальном окне "Хотите оформить заказ?"
     CONFIRM_BUTTON = By.XPATH, ".//button[text()='Да']"

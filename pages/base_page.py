@@ -11,7 +11,7 @@ class BasePage:
 
     # ============ МЕТОДЫ ОЖИДАНИЯ ============
 
-    @allure.step("Поиск элемента с ожиданием его видимости")
+    @allure.step("Поиск элемента с ожиданием его видимости ")
     def find_element_with_wait(self, locator):
         """Найти элемент с ожиданием его видимости."""
         self.wait.until(self.EC.visibility_of_element_located(locator))

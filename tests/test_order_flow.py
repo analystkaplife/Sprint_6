@@ -64,7 +64,7 @@ class TestOrderFlow:
     def test_order_from_middle_button(
         self, driver, name, last_name, address, metro, phone, rental_days, comment
     ):
-        """Полный позитивный сценарий: заказ через кнопку в середине страницы."""
+        """Полный позитивный сценарий: заказ через кнопку в середине страницы.  """
         main_page = MainPage(driver)
         main_page.click_order_button_middle()
 

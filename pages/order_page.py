@@ -6,7 +6,7 @@ from pages.order_modal_page import OrderModalPage
 
 
 class OrderPage(BasePage):
-    """Page Object для страницы оформления заказа."""
+    """Page Object для страницы оформления заказа. """
 
     def __init__(self, driver):
         super().__init__(driver)

@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 
 
 class OrderPageLocators:
-    """Локаторы для страницы оформления заказа."""
+    """Локаторы для страницы оформления заказа. """
 
     # Шаг 1: «Про арендатора»
     NAME_INPUT = By.XPATH, ".//input[@placeholder='* Имя']"

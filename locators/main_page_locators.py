@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 
 
 class MainPageLocators:
-    """Локаторы для главной страницы."""
+    """Локаторы для главной страницы. """
 
     # Кнопки «Заказать»
     ORDER_BUTTON_HEADER = By.XPATH, ".//button[contains(@class, 'Button_Button') and text()='Заказать']"

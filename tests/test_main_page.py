@@ -20,7 +20,7 @@ QUESTION_DATA = [
 class TestMainPage:
     """Тесты для главной страницы."""
 
-    @allure.title("Проверка аккордеона: при клике на вопрос отображается правильный ответ")
+    @allure.title("Проверка аккордеона: при клике на вопрос отображается правильный ответ ")
     @pytest.mark.parametrize(
         "question_index, expected_answer",
         QUESTION_DATA,

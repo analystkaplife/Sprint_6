@@ -5,7 +5,7 @@ from locators.order_modal_page_locators import OrderModalPageLocators
 
 
 class OrderModalPage(BasePage):
-    """Page Object для модального окна подтверждения заказа."""
+    """Page Object для модального окна подтверждения заказа. """
 
     @allure.step("Клик по кнопке «Да» для подтверждения заказа")
     def click_confirm_button(self):

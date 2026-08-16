@@ -9,7 +9,7 @@ class MainPage(BasePage):
 
     HEADER_HEIGHT = 80
 
-    @allure.step("Клик по кнопке «Заказать» в шапке страницы")
+    @allure.step("Клик по кнопке «Заказать» в шапке страницы ")
     def click_order_button_header(self):
         """Клик по кнопке «Заказать» в шапке страницы."""
         self.click_element_with_wait(MainPageLocators.ORDER_BUTTON_HEADER)
