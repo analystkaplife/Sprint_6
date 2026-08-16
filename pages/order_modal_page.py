@@ -10,18 +10,13 @@ class OrderModalPage(BasePage):
     @allure.step("Клик по кнопке «Да» для подтверждения заказа")
     def click_confirm_button(self):
         """Клик по кнопке «Да» для подтверждения заказа."""
-        self.click_element_with_wait(OrderModalPageLocators.CONFIRM_BUTTON)
+        confirm_button = self.wait_for_element_clickable(OrderModalPageLocators.CONFIRM_BUTTON)
+        self.click_web_element(confirm_button)
 
     @allure.step("Проверка отображения сообщения об успешном оформлении заказа")
     def is_success_message_visible(self) -> bool:
-        """
-        Проверить, что сообщение об успехе отображается.
-
-        Returns:
-            True, если сообщение «Заказ оформлен» видно, иначе False.
-        """
         try:
-            self.find_element_with_wait(OrderModalPageLocators.SUCCESS_MESSAGE)
+            self.wait_for_element_visible(OrderModalPageLocators.SUCCESS_MESSAGE)
             return True
         except Exception:
             return False
